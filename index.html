@@ -74,7 +74,10 @@ img{display:block;max-width:100%}
   padding-bottom:clamp(12px,2vw,20px)}
 .mast-title{margin:0;font-size:clamp(52px,15.5vw,232px);line-height:.84;font-weight:600;
   letter-spacing:-.055em;color:#f5f5f7}
+/* padding-bottom matters: the radio player sits immediately below, and without
+   it the tagline and the DUSHI RADIO chip end up almost touching. */
 .mast-foot{margin-top:clamp(16px,2.5vw,28px);padding-top:20px;
+  padding-bottom:clamp(18px,2.5vw,30px);
   border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;gap:28px 48px;
   align-items:flex-end;justify-content:space-between}
 .mast-dek{margin:0;max-width:420px;font-size:17px;line-height:1.45;font-weight:300;
@@ -83,6 +86,43 @@ img{display:block;max-width:100%}
 .stat{display:flex;flex-direction:column;gap:2px}
 .stat-n{font-size:clamp(28px,3.4vw,44px);line-height:1;font-weight:600;letter-spacing:-.03em;color:#f5f5f7}
 .stat-l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#86868b}
+
+/* --- Dushi Radio player --- */
+/* Sits directly under the masthead stats, so it needs real air above it or the
+   red DUSHI RADIO chip crowds the tagline. */
+.radio{margin-top:clamp(20px,3vw,34px);border-top:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(90deg,rgba(41,151,255,.10),rgba(0,0,0,0) 55%)}
+.radio-inner{display:flex;align-items:center;gap:clamp(14px,2vw,22px);
+  padding-top:20px;padding-bottom:20px}
+.radio-play{flex:0 0 auto;width:52px;height:52px;border-radius:50%;cursor:pointer;
+  display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);
+  background:#0071e3;color:#fff;transition:transform 160ms ease,background 160ms ease}
+.radio-play:hover{background:#2997ff;transform:scale(1.05)}
+.radio-play svg{display:block;margin-left:2px}
+.radio-play .ic-pause{margin-left:0}
+/* display:block above out-specifies the UA's [hidden] rule, so both icons
+   rendered stacked inside the button. Restore the hiding explicitly. */
+.radio-play svg[hidden]{display:none}
+.radio-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
+.radio-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.radio-live{font-size:10px;font-weight:800;letter-spacing:.16em;color:#fff;
+  background:#c8102e;border-radius:3px;padding:3px 7px}
+.radio-meta{font-size:12px;letter-spacing:-.16px;color:#86868b}
+.radio-title{margin:0;font-size:clamp(17px,2vw,22px);line-height:1.2;font-weight:600;
+  letter-spacing:-.02em;color:#f5f5f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.radio-bar{position:relative;height:4px;border-radius:999px;cursor:pointer;
+  background:rgba(255,255,255,.16);margin-top:4px}
+.radio-bar:focus-visible{outline:2px solid #2997ff;outline-offset:4px}
+.radio-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:#2997ff}
+.radio-times{display:flex;justify-content:space-between;font-size:11px;color:#86868b;
+  font-variant-numeric:tabular-nums}
+.radio-dl{flex:0 0 auto;font-size:12px;color:#86868b;border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;padding:7px 14px}
+.radio-dl:hover{background:rgba(255,255,255,.08);text-decoration:none;color:#f5f5f7}
+@media (max-width:700px){
+  .radio-dl{display:none}
+  .radio-title{white-space:normal}
+}
 
 /* --- ticker --- */
 .tickerwrap{margin-top:clamp(20px,3vw,36px);border-top:1px solid rgba(255,255,255,.12);
@@ -207,8 +247,12 @@ main{padding-top:clamp(40px,6vw,88px)}
   letter-spacing:-.028em;color:#f5f5f7}
 .sec-lens{margin:0;font-size:13px;line-height:1.5;letter-spacing:-.16px;color:#86868b}
 .sec-items{flex:1 1 460px;min-width:0;display:flex;flex-direction:column}
-.row{display:flex;flex-direction:column;gap:8px;padding:20px 16px 20px 0;border-radius:18px;
-  border-top:1px solid rgba(255,255,255,.12);transition:background 200ms ease}
+/* Padding on all four sides so the hover box never crowds the text, with a
+   matching negative margin so the text itself stays aligned with the section
+   above it — the box grows outward rather than pushing the copy inward. */
+.row{display:flex;flex-direction:column;gap:8px;padding:20px 18px;margin-left:-18px;
+  border-radius:18px;border-top:1px solid rgba(255,255,255,.12);
+  transition:background 200ms ease}
 .row:hover{background:#1d1d1f}
 .row-head{margin:0;font-size:20px;line-height:1.25;font-weight:600;letter-spacing:-.02em}
 .row-head a{color:#f5f5f7}
@@ -254,6 +298,8 @@ main{padding-top:clamp(40px,6vw,88px)}
 .foot-copy{margin:0;max-width:640px;font-size:12px;line-height:1.6;letter-spacing:-.16px;color:#86868b}
 
 @media (max-width:760px){
+  /* No room to bleed the hover box outward on a phone. */
+  .row{margin-left:0}
   .topnav{display:none}
   .mast-meta{gap:6px}
   .sec{flex-direction:column}
@@ -292,6 +338,36 @@ main{padding-top:clamp(40px,6vw,88px)}
     </div>
   </div>
 </header>
+
+
+<section class="radio" id="radio">
+  <div class="wrap radio-inner">
+    <button class="radio-play" id="radioPlay" type="button" aria-label="Play episode">
+      <svg class="ic-play" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+      <svg class="ic-pause" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" hidden>
+        <path d="M7 5h3.2v14H7zM13.8 5H17v14h-3.2z" fill="currentColor"/></svg>
+    </button>
+
+    <div class="radio-body">
+      <div class="radio-kicker">
+        <span class="radio-live">DUSHI RADIO</span>
+        <span class="radio-meta">Maya &amp; Danny · 7:38 · 57 exchanges</span>
+      </div>
+      <h2 class="radio-title">Two Rogue Models And Nobody Asked</h2>
+      <div class="radio-bar" id="radioBar" role="slider" tabindex="0"
+           aria-label="Seek" aria-valuemin="0" aria-valuemax="458" aria-valuenow="0">
+        <div class="radio-fill" id="radioFill"></div>
+      </div>
+      <div class="radio-times">
+        <span id="radioNow">0:00</span><span>7:38</span>
+      </div>
+    </div>
+
+    <a class="radio-dl" href="podcast.mp3" download>Download</a>
+  </div>
+  <audio id="radioAudio" src="podcast.mp3" preload="none"></audio>
+</section>
 
 <div class="tickerwrap">
   <div class="ticker">
@@ -1082,6 +1158,55 @@ main{padding-top:clamp(40px,6vw,88px)}
 </div>
 
 <script>
+// Dushi Radio transport. The <audio> element does the work; this only drives
+// the custom controls, so if the script fails the file is still downloadable.
+(function () {
+  var a = document.getElementById('radioAudio');
+  var btn = document.getElementById('radioPlay');
+  var bar = document.getElementById('radioBar');
+  var fill = document.getElementById('radioFill');
+  var now = document.getElementById('radioNow');
+  if (!a || !btn || !bar) return;
+
+  var play = btn.querySelector('.ic-play');
+  var pause = btn.querySelector('.ic-pause');
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  }
+  function icons(playing) {
+    play.hidden = playing;
+    pause.hidden = !playing;
+    btn.setAttribute('aria-label', playing ? 'Pause episode' : 'Play episode');
+  }
+
+  btn.addEventListener('click', function () {
+    if (a.paused) a.play().catch(function () {}); else a.pause();
+  });
+  a.addEventListener('play', function () { icons(true); });
+  a.addEventListener('pause', function () { icons(false); });
+  a.addEventListener('ended', function () { icons(false); });
+  a.addEventListener('timeupdate', function () {
+    var d = a.duration || Number(bar.getAttribute('aria-valuemax')) || 0;
+    if (!d) return;
+    fill.style.width = (a.currentTime / d) * 100 + '%';
+    now.textContent = fmt(a.currentTime);
+    bar.setAttribute('aria-valuenow', Math.floor(a.currentTime));
+  });
+
+  bar.addEventListener('click', function (e) {
+    var r = bar.getBoundingClientRect();
+    var d = a.duration || Number(bar.getAttribute('aria-valuemax')) || 0;
+    if (d) a.currentTime = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1) * d;
+  });
+  bar.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') a.currentTime += 15;
+    else if (e.key === 'ArrowLeft') a.currentTime -= 15;
+    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); btn.click(); }
+  });
+})();
+
 // Install-to-home-screen prompt.
 // Chrome/Android fires beforeinstallprompt and we can trigger the real dialog.
 // iOS Safari never fires it and has no programmatic install, so there we show
