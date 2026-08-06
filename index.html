@@ -137,16 +137,31 @@ img{display:block;max-width:100%}
 .agent-disclaim{margin:0;font-size:12px;line-height:1.5;letter-spacing:-.16px;
   color:rgba(255,255,255,.6)}
 
-/* --- section nav --- */
+/* --- section nav ---
+   The design scrolled these horizontally in one nowrap row, which hides every
+   category past the viewport edge and gets worse as categories are added. Here
+   they wrap instead: one row collapsed, all rows on demand. */
 .ledger{position:sticky;top:44px;z-index:20;background:rgba(0,0,0,.85);
   backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-  border-bottom:1px solid rgba(255,255,255,.12);overflow-x:auto;scroll-margin-top:44px}
-.ledger-inner{padding-top:11px;padding-bottom:11px;display:flex;gap:6px;white-space:nowrap}
+  border-bottom:1px solid rgba(255,255,255,.12);scroll-margin-top:44px}
+.ledger-bar{padding-top:11px;padding-bottom:11px;display:flex;align-items:flex-start;gap:10px}
+/* No transition on max-height here: animating it makes the expanded height
+   unreliable to read back, and a janky reveal is not worth that. */
+.ledger-chips{flex:1 1 auto;min-width:0;display:flex;flex-wrap:wrap;gap:6px;
+  max-height:34px;overflow:hidden}
+.ledger.open .ledger-chips{max-height:min(46vh,420px);overflow-y:auto}
 .chip{flex:0 0 auto;display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.12);
   border-radius:999px;padding:6px 13px;font-size:12px;letter-spacing:-.16px;color:#f5f5f7;
-  transition:background 200ms ease}
+  white-space:nowrap;transition:background 200ms ease}
 .chip:hover{background:rgba(255,255,255,.08);text-decoration:none}
 .chip-n{color:#86868b;font-size:10px}
+.ledger-toggle{flex:0 0 auto;display:flex;align-items:center;gap:6px;cursor:pointer;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;
+  padding:6px 13px;font:inherit;font-size:12px;letter-spacing:-.16px;color:#f5f5f7;
+  transition:background 200ms ease}
+.ledger-toggle:hover{background:rgba(255,255,255,.14)}
+.lt-caret{color:#86868b;transition:transform 220ms ease;line-height:1}
+.ledger.open .lt-caret{transform:rotate(180deg)}
 
 /* --- sections --- */
 main{padding-top:clamp(40px,6vw,88px)}
@@ -341,9 +356,15 @@ main{padding-top:clamp(40px,6vw,88px)}
   </div>
 </section>
 
-<div id="ledger" class="ledger noscroll">
-  <div class="wrap ledger-inner">
-    <a class="chip" href="#lead"><span class="chip-n">01</span><span>Lead</span></a><a class="chip" href="#big-stuff"><span class="chip-n">02</span><span>Big Stuff Happening in AI Right Now</span></a><a class="chip" href="#ai-companies"><span class="chip-n">03</span><span>News From AI Companies</span></a><a class="chip" href="#models"><span class="chip-n">04</span><span>Models &amp; Benchmarks</span></a><a class="chip" href="#agents"><span class="chip-n">05</span><span>AI Agents</span></a><a class="chip" href="#openclaw"><span class="chip-n">06</span><span>OpenClaw, Hermes, and Competitors</span></a><a class="chip" href="#labs"><span class="chip-n">07</span><span>Labs</span></a><a class="chip" href="#papers"><span class="chip-n">08</span><span>Papers</span></a><a class="chip" href="#hardware"><span class="chip-n">09</span><span>AI Hardware &amp; Chips</span></a><a class="chip" href="#infrastructure"><span class="chip-n">10</span><span>AI Infrastructure</span></a><a class="chip" href="#funding"><span class="chip-n">11</span><span>Funding &amp; Deals</span></a><a class="chip" href="#robots"><span class="chip-n">12</span><span>Robots</span></a><a class="chip" href="#science"><span class="chip-n">13</span><span>AI in Science</span></a><a class="chip" href="#creative-tools"><span class="chip-n">14</span><span>Tools for Creatives</span></a><a class="chip" href="#videos"><span class="chip-n">15</span><span>Videos</span></a><a class="chip" href="#policy"><span class="chip-n">16</span><span>AI Policy &amp; Regulation</span></a><a class="chip" href="#jobs"><span class="chip-n">17</span><span>Jobs</span></a><a class="chip" href="#events"><span class="chip-n">18</span><span>Big Events</span></a><a class="chip" href="#anomalies"><span class="chip-n">19</span><span>Anomalies</span></a><a class="chip" href="#agent"><span class="chip-n">—</span><span>The agent&#39;s read</span></a>
+<div id="ledger" class="ledger">
+  <div class="wrap ledger-bar">
+    <div class="ledger-chips" id="ledgerChips">
+      <a class="chip" href="#lead"><span class="chip-n">01</span><span>Lead</span></a><a class="chip" href="#big-stuff"><span class="chip-n">02</span><span>Big Stuff Happening in AI Right Now</span></a><a class="chip" href="#ai-companies"><span class="chip-n">03</span><span>News From AI Companies</span></a><a class="chip" href="#models"><span class="chip-n">04</span><span>Models &amp; Benchmarks</span></a><a class="chip" href="#agents"><span class="chip-n">05</span><span>AI Agents</span></a><a class="chip" href="#openclaw"><span class="chip-n">06</span><span>OpenClaw, Hermes, and Competitors</span></a><a class="chip" href="#labs"><span class="chip-n">07</span><span>Labs</span></a><a class="chip" href="#papers"><span class="chip-n">08</span><span>Papers</span></a><a class="chip" href="#hardware"><span class="chip-n">09</span><span>AI Hardware &amp; Chips</span></a><a class="chip" href="#infrastructure"><span class="chip-n">10</span><span>AI Infrastructure</span></a><a class="chip" href="#funding"><span class="chip-n">11</span><span>Funding &amp; Deals</span></a><a class="chip" href="#robots"><span class="chip-n">12</span><span>Robots</span></a><a class="chip" href="#science"><span class="chip-n">13</span><span>AI in Science</span></a><a class="chip" href="#creative-tools"><span class="chip-n">14</span><span>Tools for Creatives</span></a><a class="chip" href="#videos"><span class="chip-n">15</span><span>Videos</span></a><a class="chip" href="#policy"><span class="chip-n">16</span><span>AI Policy &amp; Regulation</span></a><a class="chip" href="#jobs"><span class="chip-n">17</span><span>Jobs</span></a><a class="chip" href="#events"><span class="chip-n">18</span><span>Big Events</span></a><a class="chip" href="#anomalies"><span class="chip-n">19</span><span>Anomalies</span></a><a class="chip" href="#agent"><span class="chip-n">—</span><span>The agent&#39;s read</span></a>
+    </div>
+    <button class="ledger-toggle" id="ledgerToggle" type="button"
+            aria-expanded="false" aria-controls="ledgerChips">
+      <span class="lt-label">All 20</span><span class="lt-caret">▾</span>
+    </button>
   </div>
 </div>
 
@@ -903,6 +924,33 @@ main{padding-top:clamp(40px,6vw,88px)}
 </footer>
 
 <script>
+// Section nav: collapsed to one row, expandable. The toggle hides itself when
+// every chip already fits, so a short category list gets no dead control.
+(function () {
+  var ledger = document.getElementById('ledger');
+  var chips = document.getElementById('ledgerChips');
+  var toggle = document.getElementById('ledgerToggle');
+  if (!ledger || !chips || !toggle) return;
+
+  function overflows() { return chips.scrollHeight > chips.clientHeight + 2; }
+  function sync() {
+    if (ledger.classList.contains('open')) return;
+    toggle.style.display = overflows() ? '' : 'none';
+  }
+  toggle.addEventListener('click', function () {
+    var open = ledger.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.querySelector('.lt-label').textContent = open ? 'Less' : 'All ' + chips.children.length;
+    if (!open) sync();
+  });
+  // Collapse again once the reader jumps to a section.
+  chips.addEventListener('click', function (e) {
+    if (e.target.closest('.chip') && ledger.classList.contains('open')) toggle.click();
+  });
+  window.addEventListener('resize', sync);
+  sync();
+})();
+
 (function () {
   var els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
   if (!els.length || typeof IntersectionObserver !== 'function') return;
